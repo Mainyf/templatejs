@@ -1,13 +1,13 @@
-# JavaScript Module Starter
+# templatejs
 
 ----
 
 ## Quick start
 
 ```
-git clone https://github.com/Mainyf/javascript-module-starter
+git clone https://github.com/Mainyf/templatejs
 
-cd javascript-module-starter
+cd templatejs
 
 npm i(yarn)
 
