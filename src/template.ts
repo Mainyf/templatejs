@@ -1,5 +1,4 @@
-import { childNodes } from './utils/domUtil';
-import { execAll } from './utils/regexpUtil';
+import { CompileText } from './compile';
 
 export type TemplateOptions = {
     el: string;
@@ -11,21 +10,18 @@ export class Template {
     private $options: TemplateOptions;
     private $el: HTMLTemplateElement
     private $data: any;
+    private $compile: CompileText;
 
     constructor(options: any) {
         this.$options = options;
         this.$el = document.querySelector(this.$options.el);
         this.$data = this.$options.data || Object.create({});
+        this.$compile = new CompileText();
         this._compile();
     }
 
-    private _expReg = /{{[ \n]*(\w*)[ \n]*}}/g;
-
     private _compile() {
-        const els = childNodes(this.$el);
-        els.forEach((v) => {
-            console.log(execAll(this._expReg, v.textContent).map((v) => v[1]));
-        });
+        this.$compile.render(this.$el, this.$data);
     }
 
 }
