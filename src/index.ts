@@ -1,4 +1,3 @@
-const template = document.querySelector('template');
-console.log('template', template);
+import { Template } from './template';
 
-export default 'ada';
+export default Template;

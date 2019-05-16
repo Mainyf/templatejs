@@ -6,7 +6,7 @@ const
     named = require("vinyl-named"),
     browserSync = require("browser-sync").create(),
     del = require("del"),
-    moduleName = "demo",
+    moduleName = "TemplateJs",
     webpackConfig = require("./webpack.config")(moduleName),
     output = "./dist",
     declarationDir = "./types",
