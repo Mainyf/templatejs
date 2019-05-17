@@ -1,1 +1,1 @@
-export * from './text/compileText';
+export * from './text';

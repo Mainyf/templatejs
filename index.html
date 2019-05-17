@@ -10,26 +10,44 @@
     
     <div id="demo">
         <div data-s="0">
-            <div>
+            <div @click="demo">
                 {{ demo1 }}
-                sdasd
-                {{ demo2 }}{{ demo3 }}
-            </div>
-        </div>
-        <div data-s="1">
-            <div>
-                sdasd
+
+                {{ demo2 }}
             </div>
         </div>
     </div>
     <script src="./dist/index.js"></script>
     <script>
-        new TemplateJs({
+        console.time();
+        var a = new TemplateJs({
             el: '#demo',
             data: {
-                data: 'adsasd'
+                demo1: 'asdasdas1',
+                demo2: 'asdasdas2'
+            },
+            methods: {
+                demo() {
+                    console.log('trigger demo');
+                    this.setData({
+                        ...this.$data,
+                        ...{
+                            demo1: 'Hello world'
+                        }
+                    })
+                },
+                print() {
+                    console.log('log');
+                },
+                handleInput() {
+                    console.log('handle input');
+                },
+                handleChange() {
+                    console.log('handle change');
+                }
             }
         });
+        console.timeEnd();
     </script>
 </body>
 </html>

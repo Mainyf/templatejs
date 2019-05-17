@@ -1,4 +1,4 @@
-import { convertArray, isEmpty, isNotEmpty } from './arrayUtil';
+import { convertArray, isEmpty, isNotEmpty } from './collectionUtil';
 
 export function childrens(el: Element): HTMLElement[] {
     const children = convertArray<HTMLElement>(el.children);
