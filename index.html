@@ -15,6 +15,10 @@
                 sdasd
                 {{ demo2 }}{{ demo3 }}
                 <input type="text" @input="handleInput">
+                <select @change="handleChange">
+                    <option>asd</option>
+                    <option>asd2</option>
+                </select>
             </div>
         </div>
         <div data-s="1">
@@ -36,6 +40,9 @@
                 },
                 handleInput() {
                     console.log('handle input');
+                },
+                handleChange() {
+                    console.log('handle change');
                 }
             }
         });
