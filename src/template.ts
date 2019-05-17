@@ -28,9 +28,53 @@ export class Template {
         this.$options = options;
         this.$el = document.querySelector(this.$options.el);
         this.$data = this.$options.data || Object.create({});
-        this.$methods = this.$options.methods || Object.create({});
+        this.$methods = Object.freeze(this.$options.methods || Object.create({}));
         this.$compile = new CompileText(this);
         this.$eventHandler = new EventHandler(this);
+        this._preLoad();
+        this._compile();
+    }
+
+    private _preLoad() {
+        this._attachMethods();
+        this._attachData();
+    }
+
+    private _attachMethods() {
+        const keys = Object.keys(this.$methods);
+        const keyLen = keys.length;
+        for(let i = 0;i < keyLen;i++) {
+            Object.defineProperty(this, keys[i], {
+                enumerable: true,
+                configurable: false,
+                get() {
+                    return this.$methods[keys[i]];
+                },
+                set() {}
+            });
+        }
+    }
+
+    private _attachData() {
+        const keys = Object.keys(this.$data);
+        const keyLen = keys.length;
+        for(let i = 0;i < keyLen;i++) {
+            const name = keys[i];
+            Object.defineProperty(this, name, {
+                enumerable: true,
+                configurable: false,
+                get() {
+                    return this.$data[name];
+                },
+                set(newVal) {
+                    this.$data[name] = newVal;
+                }
+            });
+        }
+    }
+
+    public setData(newData: any) {
+        this.$data = newData;
         this._compile();
     }
 

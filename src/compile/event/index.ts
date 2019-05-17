@@ -24,15 +24,15 @@ export class EventHandler extends CompileEntry {
 
     private _handleBind(el: Element, methods: TemplateMethods, eventProperty: Map<string, string>) {
         for(
-            let keys = eventProperty.keys(),
-            value = keys.next()
+            let iterator = eventProperty.entries(),
+            result = iterator.next()
             ;
-            !value.done
+            !result.done
             ;
-            value = keys.next()
+            result = iterator.next()
         ) {
-            const eventName = value.value;
-            const fnName = eventProperty.get(eventName);
+            const eventName = result.value[0];
+            const fnName = result.value[1];
             if(fnName in methods) {
                 this._bindEventToElemnent(el, eventName, methods[fnName]);
             }

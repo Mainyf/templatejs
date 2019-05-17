@@ -29,14 +29,26 @@
     </div>
     <script src="./dist/index.js"></script>
     <script>
+        console.time();
         new TemplateJs({
             el: '#demo',
             data: {
-                data: 'adsasd'
+                demo1: 'asdasdas1',
+                demo2: 'asdasdas2',
+                demo3: 'asdasdas3'
             },
             methods: {
                 demo() {
                     console.log('trigger demo');
+                    this.setData({
+                        ...this.$data,
+                        ...{
+                            demo1: 'Hello world'
+                        }
+                    })
+                },
+                print() {
+                    console.log('log');
                 },
                 handleInput() {
                     console.log('handle input');
@@ -46,6 +58,7 @@
                 }
             }
         });
+        console.timeEnd();
     </script>
 </body>
 </html>
