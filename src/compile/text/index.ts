@@ -2,7 +2,7 @@ import { Template } from '@src/template';
 import { CompileEntry } from '../compileBase';
 import { childNodes } from '@src/utils/domUtil';
 import { execAll } from '@src/utils/regexpUtil';
-import { findIndex } from '@src/utils/collectionUtil';
+import { findIndex, find } from '@src/utils/collectionUtil';
 
 type CacheDataItem = {
     data: any;
@@ -71,6 +71,8 @@ export class CompileText extends CompileEntry {
                     const text = node.textContent;
                     // node.textContent = text.replace(text.substring(v.first, v.second), newValue);
                     this._updateIndex(node, v.original, v.first, newValue, v.key);
+                    console.log(v);
+                    console.log(find(this._indexMap.get(node), (x) => x.key === v.key));
                     node.textContent = this._updateText(text, v.first, v.second, newValue);
                 }
             }
@@ -107,19 +109,14 @@ export class CompileText extends CompileEntry {
                 arr.push(_data)
             } else {
                 const prev = arr[index];
-                console.log('prev.first', prev.first)
-                console.log('prev.second', prev.second)
-                console.log('_data.first', _data.first)
-                console.log('_data.second', _data.second)
                 // const firstPatch = _data.first - prev.first;
                 const secondPatch = _data.second - prev.second;
                 
                 arr[index] = _data;
-                const behindArr = arr.slice(index + 1);
-                const behindArrLen = behindArr.length;
-                for(let i = 0;i < behindArrLen;i++) {
-                    const item = behindArr[i];
-                    behindArr[i] = {
+                const arrLen = arr.length;
+                for(let i = index + 1;i < arrLen;i++) {
+                    const item = arr[i];
+                    arr[i] = {
                         ...item,
                         ...{
                             first: item.first + secondPatch,
@@ -127,6 +124,7 @@ export class CompileText extends CompileEntry {
                         }
                     }
                 }
+                
             }
         }
     }
