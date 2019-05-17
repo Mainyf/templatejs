@@ -108,35 +108,30 @@ export class CompileText extends CompileEntry {
             if (index === -1) {
                 arr.push(_data)
             } else {
-                const prev = arr[index];
-                // const firstPatch = _data.first - prev.first;
-                const secondPatch = _data.second - prev.second;
-                
-                arr[index] = _data;
-                const arrLen = arr.length;
-                for(let i = index + 1;i < arrLen;i++) {
-                    const item = arr[i];
-                    arr[i] = {
-                        ...item,
-                        ...{
-                            first: item.first + secondPatch,
-                            second: item.second + secondPatch
-                        }
-                    }
-                }
-                
+                this._lengthPatch(arr, index, _data);
             }
         }
     }
 
     private _lengthPatch(
-        node: Text,
-        original: string,
+        arr: CacheDataItem[],
         index: number,
-        data: any,
-        name: string
+        data: any
     ) {
-
+        const prev = arr[index];
+        const secondPatch = data.second - prev.second;
+        arr[index] = data;
+        const arrLen = arr.length;
+        for(let i = index + 1;i < arrLen;i++) {
+            const item = arr[i];
+            arr[i] = {
+                ...item,
+                ...{
+                    first: item.first + secondPatch,
+                    second: item.second + secondPatch
+                }
+            }
+        }
     }
 
 }
