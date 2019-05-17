@@ -10,10 +10,11 @@
     
     <div id="demo">
         <div data-s="0">
-            <div>
+            <div @click="demo">
                 {{ demo1 }}
                 sdasd
                 {{ demo2 }}{{ demo3 }}
+                <input type="text" @input="handleInput">
             </div>
         </div>
         <div data-s="1">
@@ -28,6 +29,14 @@
             el: '#demo',
             data: {
                 data: 'adsasd'
+            },
+            methods: {
+                demo() {
+                    console.log('trigger demo');
+                },
+                handleInput() {
+                    console.log('handle input');
+                }
             }
         });
     </script>

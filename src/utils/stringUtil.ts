@@ -5,3 +5,8 @@ export function removeStr(source: string, ...str: string[]): string {
     });
     return _source;
 }
+
+export function makeMap(source: string): (str: string) => boolean {
+    const arr = source.split(',');
+    return (str: string) => arr.indexOf(str) !== -1;
+}
