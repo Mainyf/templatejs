@@ -2,8 +2,7 @@ import { Template } from '@src/template';
 import { CompileEntry } from '../compileBase';
 import { childNodes } from '@src/utils/domUtil';
 import { execAll } from '@src/utils/regexpUtil';
-import { type } from 'os';
-import { find, findIndex } from '@src/utils/collectionUtil';
+import { findIndex } from '@src/utils/collectionUtil';
 
 type CacheDataItem = {
     data: any;
@@ -47,8 +46,8 @@ export class CompileText extends CompileEntry {
                 const name = execItem[1];
                 const _data = data[name];
                 const text = node.textContent;
-                node.textContent = text.replace(originalStr, _data);
                 this._updateIndex(node, originalStr, text.indexOf(originalStr), _data, name);
+                node.textContent = text.replace(originalStr, _data);
             }
         }
     }
@@ -71,8 +70,8 @@ export class CompileText extends CompileEntry {
                 if(oldValue !== newValue) {
                     const text = node.textContent;
                     // node.textContent = text.replace(text.substring(v.first, v.second), newValue);
-                    node.textContent = this._updateText(text, v.first, v.second, newValue);
                     this._updateIndex(node, v.original, v.first, newValue, v.key);
+                    node.textContent = this._updateText(text, v.first, v.second, newValue);
                 }
             }
         }
@@ -107,8 +106,39 @@ export class CompileText extends CompileEntry {
             if (index === -1) {
                 arr.push(_data)
             } else {
+                const prev = arr[index];
+                console.log('prev.first', prev.first)
+                console.log('prev.second', prev.second)
+                console.log('_data.first', _data.first)
+                console.log('_data.second', _data.second)
+                // const firstPatch = _data.first - prev.first;
+                const secondPatch = _data.second - prev.second;
+                
                 arr[index] = _data;
+                const behindArr = arr.slice(index + 1);
+                const behindArrLen = behindArr.length;
+                for(let i = 0;i < behindArrLen;i++) {
+                    const item = behindArr[i];
+                    behindArr[i] = {
+                        ...item,
+                        ...{
+                            first: item.first + secondPatch,
+                            second: item.second + secondPatch
+                        }
+                    }
+                }
             }
         }
     }
+
+    private _lengthPatch(
+        node: Text,
+        original: string,
+        index: number,
+        data: any,
+        name: string
+    ) {
+
+    }
+
 }
