@@ -3,9 +3,10 @@ import { CompileEntry } from '../compileBase';
 import { childNodes } from '@src/utils/domUtil';
 import { execAll } from '@src/utils/regexpUtil';
 import { type } from 'os';
+import { find, findIndex } from '@src/utils/collectionUtil';
 
 type CacheDataItem = {
-    node: Text,
+    data: any;
     original: string;
     key: string;
     first: number;
@@ -18,7 +19,7 @@ export class CompileText extends CompileEntry {
         super(template);
     }
 
-    private _indexMap: Map<Text, CacheDataItem> = new Map();
+    private _indexMap: Map<Text, CacheDataItem[]> = new Map();
 
     private _expReg = /{{[ \n]*(\w*)[ \n]*}}/g;
 
@@ -45,8 +46,9 @@ export class CompileText extends CompileEntry {
                 const originalStr = execItem[0];
                 const name = execItem[1];
                 const _data = data[name];
-                node.textContent = el.textContent.replace(originalStr, _data)
-                this._updateIndex(node, originalStr, _data, name, execItem);
+                const text = node.textContent;
+                node.textContent = text.replace(originalStr, _data);
+                this._updateIndex(node, originalStr, text.indexOf(originalStr), _data, name);
             }
         }
     }
@@ -60,23 +62,53 @@ export class CompileText extends CompileEntry {
             ;
             execResult = iterator.next()
         ) {
-            const [data, { key, node, first, second }] = execResult.value;
-            const text = node.textContent;
-            
-            if (oldData[key] !== newData[key]) {
-                node.textContent = text.replace(text.substring(first, second), newData[key]);
+            const [node, item] = execResult.value;
+            const itemLen = item.length;
+            for(let i = 0;i < itemLen;i++) {
+                const v = item[i];
+                const oldValue = oldData[v.key];
+                const newValue = newData[v.key];
+                if(oldValue !== newValue) {
+                    const text = node.textContent;
+                    // node.textContent = text.replace(text.substring(v.first, v.second), newValue);
+                    node.textContent = this._updateText(text, v.first, v.second, newValue);
+                    this._updateIndex(node, v.original, v.first, newValue, v.key);
+                }
             }
         }
     }
 
-    private _updateIndex(node: Text, original: string, data: any, name: string, execResult: RegExpExecArray) {
-        // TODO code...
-        this._indexMap.set(node, {
-            node,
+    private _updateText(text: string, first: number, second: number, newStr: string): string {
+        const result = text;
+        const left = result.substring(0, first) || '';
+        const right = result.substring(second) || '';
+        return left + newStr + right;
+    }
+
+    private _updateIndex(
+        node: Text,
+        original: string,
+        index: number,
+        data: any,
+        name: string
+    ) {
+        const _data = {
+            data,
             original,
             key: name,
-            first: execResult.index,
-            second: execResult.index + execResult[0].length
-        });
+            first: index,
+            second: index + data.length
+        };
+        if (!this._indexMap.has(node)) {
+            this._indexMap.set(node, [_data]);
+        } else {
+            const arr = this._indexMap.get(node);
+            const index = findIndex(arr, (v) => v.original === original);
+            if (index === -1) {
+                arr.push(_data)
+            } else {
+                arr[index] = _data;
+            }
+        }
     }
 }

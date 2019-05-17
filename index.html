@@ -12,30 +12,19 @@
         <div data-s="0">
             <div @click="demo">
                 {{ demo1 }}
-                sdasd
-                {{ demo2 }}{{ demo3 }}
-                <input type="text" @input="handleInput">
-                <select @change="handleChange">
-                    <option>asd</option>
-                    <option>asd2</option>
-                </select>
-            </div>
-        </div>
-        <div data-s="1">
-            <div>
-                sdasd
+
+                {{ demo2 }}
             </div>
         </div>
     </div>
     <script src="./dist/index.js"></script>
     <script>
         console.time();
-        new TemplateJs({
+        var a = new TemplateJs({
             el: '#demo',
             data: {
                 demo1: 'asdasdas1',
-                demo2: 'asdasdas2',
-                demo3: 'asdasdas3'
+                demo2: 'asdasdas2'
             },
             methods: {
                 demo() {

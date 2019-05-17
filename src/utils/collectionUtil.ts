@@ -71,3 +71,23 @@ function _convertSetToArray<T>(obj: Set<any>): T[] {
     }
     return result;
 }
+
+export function find<T>(collection: Array<T>, expression: (item: T) => boolean): T | undefined {
+    for(let i = 0;i < collection.length;i++) {
+        const value = collection[i];
+        if(expression(value)) {
+            return value;
+        }
+    }
+    return null;
+}
+
+export function findIndex<T>(collection: Array<T>, expression: (item: T) => boolean): number {
+    for(let i = 0;i < collection.length;i++) {
+        const value = collection[i];
+        if(expression(value)) {
+            return i;
+        }
+    }
+    return -1;
+}
