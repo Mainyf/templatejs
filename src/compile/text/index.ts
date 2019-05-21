@@ -18,6 +18,8 @@ export class CompileText extends CompileEntry {
         super(template);
     }
 
+    // 框架代码，尽量不用高阶函数，例如forEach、map、filter
+    // 一个方法(函数)，只做一件事
     private _indexMap: Map<Text, CacheDataItem[]> = new Map();
 
     private _expReg = /{{[ \n]*(\w*)[ \n]*}}/g;

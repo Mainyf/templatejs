@@ -1,4 +1,4 @@
-import { Template } from "@src/template";
+import { Template } from '@src/template';
 
 export class CompileEntry {
     
